@@ -4,6 +4,7 @@ projekt_1.py: první projekt do Engeto Online Python Akademie
 author: Barbora Svobodová
 email: stavby.hlavac@seznam.cz
 """
+# Seznam textů k analýze
 TEXTS = [
     '''Situated about 10 miles west of Kemmerer,
     Fossil Butte is a ruggedly impressive
@@ -32,22 +33,17 @@ TEXTS = [
     garpike and stingray are also present.'''
 ]
 
+import re
+
 # Seznam registrovaných uživatelů (jméno: heslo)
 registrovani_uzivatele = {
     "bob": "123",
     "ann": "pass123",
     "mike": "password123",
     "liz": "pass123"
-    }
+}
 
-
-# Přihlašování uživatele 
+# Přihlašování uživatele
 username = input("Username: ")
 password = input("Password: ")
 
-# Ověření přihlašovacích údajů
-if username in registrovani_uzivatele and registrovani_uzivatele[username] == password:
-    print("----------------------------------------")
-    print(f"Welcome to the app, {username}")
-    print("We have 3 texts to be analyzed.")
-    print("----------------------------------------")
