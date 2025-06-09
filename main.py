@@ -31,3 +31,23 @@ TEXTS = [
     in modern oceans. Other fish such as paddlefish,
     garpike and stingray are also present.'''
 ]
+
+# Seznam registrovaných uživatelů (jméno: heslo)
+registrovani_uzivatele = {
+    "bob": "123",
+    "ann": "pass123",
+    "mike": "password123",
+    "liz": "pass123"
+    }
+
+
+# Přihlašování uživatele 
+username = input("Username: ")
+password = input("Password: ")
+
+# Ověření přihlašovacích údajů
+if username in registrovani_uzivatele and registrovani_uzivatele[username] == password:
+    print("----------------------------------------")
+    print(f"Welcome to the app, {username}")
+    print("We have 3 texts to be analyzed.")
+    print("----------------------------------------")
