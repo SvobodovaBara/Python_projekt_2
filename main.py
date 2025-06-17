@@ -43,7 +43,7 @@ TEXTS = [
     garpike and stingray are also present.'''
 ]
 
-# Přihlašovací proces
+# Přihlašování
 username = input("Username: ")
 password = input("Password: ")
 
@@ -87,7 +87,7 @@ if username in registrovani_uzivatele and registrovani_uzivatele[username] == pa
     print(f"The sum of all the numbers: {soucet_cisel}")
     print("----------------------------------------")
 
-    # Výpočet četnosti délek slov
+    # Výpočet délek slov
     cetnosti = {}
     for slovo in slova:
         delka = len(slovo)
@@ -100,3 +100,4 @@ if username in registrovani_uzivatele and registrovani_uzivatele[username] == pa
 
 else:
     print("Unregistered user, terminating the program.")
+    
