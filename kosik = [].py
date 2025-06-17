@@ -1,9 +1,3 @@
-"""
-projekt_1.py: první projekt do Engeto Online Python Akademie
-
-author: Barbora Svobodová
-email: stavby.hlavac@seznam.cz
-"""
 import re
 
 # Seznam registrovaných uživatelů (jméno: heslo)

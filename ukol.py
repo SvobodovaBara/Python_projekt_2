@@ -1,9 +1,3 @@
-"""
-projekt_1.py: první projekt do Engeto Online Python Akademie
-
-author: Barbora Svobodová
-email: stavby.hlavac@seznam.cz
-"""
 import re
 
 # Seznam registrovaných uživatelů (jméno: heslo)
@@ -99,4 +93,3 @@ if username in registrovani_uzivatele and registrovani_uzivatele[username] == pa
         print(f"{delka:3} | {'*' * pocet:<15} | {pocet}")
 
 else:
-    print("Unregistered user, terminating the program.")
