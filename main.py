@@ -1,103 +1,80 @@
 """
-projekt_1.py: první projekt do Engeto Online Python Akademie
+main.py: druhý projekt do Engeto Online Python Akademie
 
 author: Barbora Svobodová
 email: stavby.hlavac@seznam.cz
 """
-import re
+import random
+import time
 
-# Seznam registrovaných uživatelů (jméno: heslo)
-registrovani_uzivatele = {
-    "bob": "123",
-    "ann": "pass123",
-    "mike": "password123",
-    "liz": "pass123"
-}
+def generate_secret_number(): # vygeneruje čmísté číslo 
+    digits = list("123456789")         # první číslice nesmí být nula
+    first_digit = random.choice(digits)
+    digits.remove(first_digit)
+    digits.append("0")                 # nula může být použita
+    remaining_digits = random.sample(digits, 3)
+    return first_digit + ''.join(remaining_digits)
 
-# Seznam textů k analýze
-TEXTS = [
-    '''Situated about 10 miles west of Kemmerer,
-    Fossil Butte is a ruggedly impressive
-    topographic feature that rises sharply
-    some 1000 feet above Twin Creek Valley
-    to an elevation of more than 7500 feet
-    above sea level. The butte is located just
-    north of US 30 and the Union Pacific Railroad,
-    which traverse the valley.''',
-    '''At the base of Fossil Butte are the bright
-    red, purple, yellow and gray beds of the Wasatch
-    Formation. Eroded portions of these horizontal
-    beds slope gradually upward from the valley floor
-    and steepen abruptly. Overlying them and extending
-    to the top of the butte are the much steeper
-    buff-to-white beds of the Green River Formation,
-    which are about 300 feet thick.''',
-    '''The monument contains 8198 acres and protects
-    a portion of the largest deposit of freshwater fish
-    fossils in the world. The richest fossil fish deposits
-    are found in multiple limestone layers, which lie some
-    100 feet below the top of the butte. The fossils
-    represent several varieties of perch, as well as
-    other freshwater genera and herring similar to those
-    in modern oceans. Other fish such as paddlefish,
-    garpike and stingray are also present.'''
-]
+def is_valid_guess(guess): # ověří platný tip
+    if not guess.isdigit():
+        print("Chyba: Vstup musí obsahovat pouze číslice.")
+        return False
+    if len(guess) != 4:
+        print("Chyba: Číslo musí mít přesně 4 číslice.")
+        return False
+    if guess[0] == "0":
+        print("Chyba: Číslo nesmí začínat nulou.")
+        return False
+    if len(set(guess)) != 4:
+        print("Chyba: Číslice se nesmí opakovat.")
+        return False
+    return True
 
-# Přihlašování
-username = input("Username: ")
-password = input("Password: ")
+def count_bulls_and_cows(secret, guess): # spočítá počet bulls a crows
+    bulls = sum(a == b for a, b in zip(secret, guess))
+    cows = sum(min(secret.count(d), guess.count(d)) for d in set(guess)) - bulls
+    return bulls, cows
 
-# Ověření přihlašovacích údajů
-if username in registrovani_uzivatele and registrovani_uzivatele[username] == password:
-    print("----------------------------------------")
-    print(f"Welcome to the app, {username}")
-    print("We have 3 texts to be analyzed.")
-    print("----------------------------------------")
+def format_result(word, number): # vrátí správný tvar
+  return f"{number} {word}" if number == 1 else f"{number} {word}s"
 
-    volba = input("Enter a number between 1 and 3 to select: ")
+def play_game():
+    # Úvodní přivítání a instrukce
+    print("Hi there!")
+    print("-----------------------------------------------")
+    print("I've generated a random 4 digit number for you.")
+    print("Let's play a bulls and cows game.")
+    print("-----------------------------------------------")
+    print("Enter a number:")
+    print("-----------------------------------------------")
 
-    # Ověření vstupu
-    if not volba.isdigit():
-        print("Error: Please enter a valid number. Terminating the program.")
-        exit()
-    
-    volba = int(volba)
-    if volba < 1 or volba > len(TEXTS):
-        print("Error: Selected number does not match any text. Terminating the program.")
-        exit()
+    secret_number = generate_secret_number()  # Tajné číslo
+    attempts = 0                              # Počet pokusů
+    start_time = time.time()                  # Čas zahájení
 
-    text_k_analyze = TEXTS[volba - 1]
+    # Hlavní herní smyčka
+    while True:
+        guess = input(">>> ")
+        if not is_valid_guess(guess):
+            continue  # Pokud vstup není platný, pokračuj od začátku
 
-    # Analýza textu
-    slova = re.findall(r'\b\w+\b', text_k_analyze)
-    pocet_slov = len(slova)
-    velka_pismena = sum(1 for slovo in slova if slovo.istitle())
-    cela_velka = sum(1 for slovo in slova if slovo.isupper())
-    cela_mala = sum(1 for slovo in slova if slovo.islower())
-    cisla = [int(cislo) for cislo in re.findall(r'\b\d+\b', text_k_analyze)]
-    pocet_cisel = len(cisla)
-    soucet_cisel = sum(cisla)
+        attempts += 1
+        bulls, cows = count_bulls_and_cows(secret_number, guess)
 
-    print("----------------------------------------")
-    print(f"There are {pocet_slov} words in the selected text.")
-    print(f"There are {velka_pismena} titlecase words.")
-    print(f"There are {cela_velka} uppercase words.")
-    print(f"There are {cela_mala} lowercase words.")
-    print(f"There are {pocet_cisel} numeric strings.")
-    print(f"The sum of all the numbers: {soucet_cisel}")
-    print("----------------------------------------")
+        if bulls == 4:
+            # Hráč uhodl celé číslo správně
+            elapsed_time = int(time.time() - start_time)
+            print("-----------------------------------------------")
+            print(f"Correct, you've guessed the right number in {attempts} {'guess' if attempts == 1 else 'guesses'}!")
+            print(f"Time taken: {elapsed_time} seconds.")
+            print("-----------------------------------------------")
+            print("That's amazing!")
+            break
+        else:
+            # hráč hádal špatně, vypiš počet bulls a cows
+            print(f"{format_result('bull', bulls)}, {format_result('cow', cows)}")
+            print("-----------------------------------------------")
 
-    # Výpočet délek slov
-    cetnosti = {}
-    for slovo in slova:
-        delka = len(slovo)
-        cetnosti[delka] = cetnosti.get(delka, 0) + 1
-
-    print("LEN | OCCURRENCES | NR.")
-    print("----------------------------------------")
-    for delka, pocet in sorted(cetnosti.items()):
-        print(f"{delka:3} | {'*' * pocet:<15} | {pocet}")
-
-else:
-    print("Unregistered user, terminating the program.")
-    
+# spuštění hry
+if __name__ == "__main__":
+    play_game()
